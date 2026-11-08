@@ -13,11 +13,12 @@
       "aspectRatio": "16/9",
       "canvasWidth": 980,
       "fonts": {
-        "sans": "Google Sans,Product Sans,Arial",
+        "sans": "Google Sans,Product Sans,Noto Sans TC Deck,Microsoft JhengHei,Arial",
         "mono": "Roboto Mono,SFMono-Regular,Consolas,monospace",
-        "local": "Google Sans,Product Sans,Arial,Roboto Mono,SFMono-Regular,Consolas",
+        "local": "Google Sans,Product Sans,Noto Sans TC Deck,Noto Serif TC Deck,Microsoft JhengHei,PMingLiU,Roboto Mono,SFMono-Regular,Consolas",
         "provider": "none",
-        "weights": "400,500,600,700"
+        "weights": "400,500,600,700",
+        "serif": "Noto Serif TC Deck,PMingLiU,serif"
       }
     }
   }
