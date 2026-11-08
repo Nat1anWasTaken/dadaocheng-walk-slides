@@ -2,7 +2,7 @@
 
 文學經典閱讀期中報告：洪愛珠《老派少女購物路線》大稻埕走讀。使用 [Slidev](https://sli.dev) 製作，主題沿用 [cal-study-group-slides](https://github.com/Nat1anWasTaken/cal-study-group-slides)。
 
-線上版：<https://nat1anwastaken.github.io/dadaocheng-walk-slides/>
+線上版：<https://nath.tw/dadaocheng-walk-slides/>
 
 ## 開發
 
