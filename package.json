@@ -6,7 +6,9 @@
   "scripts": {
     "build": "slidev build",
     "dev": "slidev --open",
-    "export": "slidev export"
+    "export": "slidev export",
+    "fonts": "uv run --with fonttools --with brotli python scripts/subset-fonts.py",
+    "fonts:check": "python3 scripts/subset-fonts.py --check"
   },
   "dependencies": {
     "@slidev/cli": "^52.19.0",

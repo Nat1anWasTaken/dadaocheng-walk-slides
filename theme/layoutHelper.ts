@@ -29,3 +29,39 @@ export function handleBackground(background?: string, dim = true, backgroundSize
     color: dim ? 'white' : undefined,
   }
 }
+
+/**
+ * True when a slot renders something visible (not just comments / whitespace).
+ * Slidev always passes a default slot to layouts, even for an empty slide body.
+ */
+export function hasSlotContent(slot?: (...args: any[]) => any[]): boolean {
+  if (!slot)
+    return false
+  const visible = (nodes: any[]): boolean => nodes.some((n) => {
+    if (n == null || typeof n === 'boolean')
+      return false
+    if (typeof n === 'string')
+      return n.trim().length > 0
+    const type = typeof n.type === 'symbol' ? String(n.type) : ''
+    if (type.includes('Comment'))
+      return false
+    if (type.includes('Text'))
+      return typeof n.children === 'string' && n.children.trim().length > 0
+    if (type.includes('Fragment'))
+      return Array.isArray(n.children) && visible(n.children)
+    return true
+  })
+  return visible(slot() ?? [])
+}
+
+/** One photo in a PhotoMosaic / mosaic layout */
+export interface MosaicPhoto {
+  src: string
+  /** Tiny chip, e.g. "03 永樂市場" or "苦茶" */
+  label?: string
+  stop?: string | number
+  /** object-position focal point, e.g. "50% 30%" */
+  position?: string
+  /** Aspect ratio (w/h) if you want to skip auto-detection: 0.75, "3/4", "portrait", "landscape" */
+  ratio?: number | string
+}

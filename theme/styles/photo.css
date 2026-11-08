@@ -1,0 +1,565 @@
+/*
+ * Photo-led layouts: photo, book-vs-now, mosaic, plus the PhotoChip,
+ * PhotoMosaic and RouteMap components. Built on the tokens in theme.css.
+ */
+
+:root {
+  --deck-photo-inset: 2.25rem;
+  --deck-scrim-ink: 18, 19, 21;
+  --deck-map-land: #f1f3f4;
+  --deck-map-casing: #dadce0;
+  --deck-map-water: #d2e3fc;
+}
+
+/* ------------------------------------------------------------ chip */
+
+.deck-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  max-width: 100%;
+  padding: 0.34em 0.9em;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 1px 2px rgba(60, 64, 67, 0.2), 0 4px 16px rgba(32, 33, 36, 0.18);
+  color: var(--google-ink);
+  font-family: var(--deck-font-sans);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.deck-chip:has(.deck-chip-stop) {
+  padding-left: 0.32em;
+}
+
+.deck-chip-md {
+  font-size: 17px;
+}
+
+.deck-chip-sm {
+  font-size: 13px;
+}
+
+.deck-chip-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.deck-chip-stop {
+  display: inline-grid;
+  min-width: 1.8em;
+  height: 1.8em;
+  padding: 0 0.4em;
+  place-items: center;
+  border-radius: 999px;
+  background: var(--google-blue);
+  color: white;
+  font-family: 'Google Sans', 'Product Sans', Arial, sans-serif;
+  font-size: 0.8em;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+.deck-chip-dot {
+  flex: none;
+  width: 0.55em;
+  height: 0.55em;
+  border-radius: 50%;
+}
+
+.deck-chip-dot.blue { background: var(--google-blue); }
+.deck-chip-dot.red { background: var(--google-red); }
+.deck-chip-dot.yellow { background: var(--google-yellow); }
+.deck-chip-dot.green { background: var(--google-green); }
+
+/* ------------------------------------------------------------ photo */
+
+.slidev-layout.photo {
+  padding: 0;
+  background: #202124;
+  color: white;
+  isolation: isolate;
+}
+
+.deck-photo-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.slidev-layout.photo.fit-contain .deck-photo-img {
+  object-fit: contain;
+}
+
+.deck-photo-backdrop {
+  position: absolute;
+  inset: -48px;
+  background-position: center;
+  background-size: cover;
+  filter: blur(28px) brightness(0.5) saturate(1.15);
+}
+
+.deck-photo-scrim {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 42%;
+  background: linear-gradient(to top, rgba(var(--deck-scrim-ink), 0.6), rgba(var(--deck-scrim-ink), 0.28) 42%, rgba(var(--deck-scrim-ink), 0));
+  pointer-events: none;
+}
+
+.deck-photo-scrim.strong {
+  height: 55%;
+  background: linear-gradient(to top, rgba(var(--deck-scrim-ink), 0.78), rgba(var(--deck-scrim-ink), 0.42) 45%, rgba(var(--deck-scrim-ink), 0));
+}
+
+.deck-photo-chip {
+  position: absolute;
+  top: 1.75rem;
+  left: var(--deck-photo-inset);
+}
+
+.deck-photo-caption {
+  position: absolute;
+  right: var(--deck-photo-inset);
+  bottom: 1.6rem;
+  left: var(--deck-photo-inset);
+  max-width: 44rem;
+  color: white;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.45), 0 0 22px rgba(0, 0, 0, 0.3);
+}
+
+.slidev-layout.photo.has-map .deck-photo-caption {
+  right: calc(232px + var(--deck-photo-inset) + 1rem);
+}
+
+.deck-photo-caption p {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  line-height: 1.38;
+  text-wrap: balance;
+}
+
+.deck-photo-caption h1 {
+  max-width: none;
+  margin: 0 0 0.25rem;
+  color: white;
+  font-size: 40px;
+  font-weight: 600;
+}
+
+.deck-photo-caption h1 + p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.deck-photo-map {
+  position: absolute;
+  right: 1.5rem;
+  bottom: 1.5rem;
+  width: 232px;
+  height: 152px;
+  overflow: hidden;
+  border: 3px solid white;
+  border-radius: 14px;
+  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.3);
+}
+
+/* ------------------------------------------------------------ book-vs-now */
+
+.slidev-layout.book-vs-now {
+  display: grid;
+  grid-template-columns: minmax(0, 46fr) minmax(0, 54fr);
+  padding: 0;
+}
+
+.slidev-layout.book-vs-now.reverse {
+  grid-template-columns: minmax(0, 54fr) minmax(0, 46fr);
+}
+
+.slidev-layout.book-vs-now.reverse .bvn-photo {
+  order: -1;
+}
+
+.bvn-text {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  justify-content: center;
+  padding: 2.5rem 2.75rem 2.25rem 4rem;
+}
+
+.slidev-layout.book-vs-now.reverse .bvn-text {
+  padding: 2.5rem 3.5rem 2.25rem 3.75rem;
+}
+
+.bvn-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.7rem;
+}
+
+.bvn-tags .deck-chip {
+  border: 1px solid var(--google-border);
+  background: white;
+  box-shadow: none;
+}
+
+.slidev-layout .bvn-quote {
+  position: relative;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  color: var(--google-ink);
+  font-family: var(--deck-font-serif);
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  line-height: 1.6;
+  text-wrap: pretty;
+}
+
+.bvn-quote.q-l { font-size: 44px; }
+.bvn-quote.q-m { font-size: 38px; }
+.bvn-quote.q-s { font-size: 32px; }
+.bvn-quote.q-xs { font-size: 28px; }
+
+.bvn-open,
+.bvn-close {
+  color: var(--google-blue);
+}
+
+/* Hanging opening bracket keeps the quote's left edge flush with the source line */
+.bvn-open {
+  position: absolute;
+  top: 0;
+  left: -1em;
+}
+
+.bvn-source {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 1.6rem;
+  color: var(--google-muted);
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+}
+
+.bvn-source::before {
+  width: 1.75rem;
+  height: 2px;
+  flex: none;
+  border-radius: 2px;
+  background: var(--google-red);
+  content: '';
+}
+
+.bvn-note {
+  margin-top: 1.1rem;
+  color: var(--google-muted);
+  font-size: 18px;
+  line-height: 1.5;
+}
+
+.bvn-note p {
+  margin: 0;
+}
+
+.bvn-photo {
+  position: relative;
+  min-width: 0;
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  background: var(--google-surface);
+}
+
+.bvn-photo img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.bvn-chip-now {
+  position: absolute;
+  top: 1.75rem;
+  left: 1.75rem;
+}
+
+.bvn-photo figcaption {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding: 3.5rem 1.75rem 1.4rem;
+  background: linear-gradient(to top, rgba(var(--deck-scrim-ink), 0.6), rgba(var(--deck-scrim-ink), 0));
+  color: white;
+  font-size: 19px;
+  font-weight: 500;
+  line-height: 1.4;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+/* 直排: quote set vertically like a book page, columns read right to left */
+.slidev-layout.book-vs-now.vertical .bvn-text {
+  align-items: center;
+}
+
+.slidev-layout.book-vs-now.vertical .bvn-tags,
+.slidev-layout.book-vs-now.vertical .bvn-source,
+.slidev-layout.book-vs-now.vertical .bvn-note {
+  align-self: stretch;
+}
+
+.slidev-layout.book-vs-now.vertical .bvn-quote {
+  height: 17.5rem;
+  margin-top: 1em;
+  letter-spacing: 0.14em;
+  line-height: 1.85;
+  text-wrap: wrap;
+  writing-mode: vertical-rl;
+}
+
+.slidev-layout.book-vs-now.vertical .bvn-quote.q-l { font-size: 38px; }
+.slidev-layout.book-vs-now.vertical .bvn-quote.q-m { font-size: 34px; }
+.slidev-layout.book-vs-now.vertical .bvn-quote.q-s { font-size: 30px; }
+
+.slidev-layout.book-vs-now.vertical .bvn-open {
+  top: -1em;
+  right: 0.425em;
+  left: auto;
+}
+
+/* ------------------------------------------------------------ mosaic */
+
+.slidev-layout.mosaic {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  background: white;
+}
+
+.slidev-layout.mosaic.has-header {
+  padding: var(--google-slide-padding);
+}
+
+.slidev-layout.mosaic .mosaic-grid {
+  min-height: 0;
+  flex: 1;
+}
+
+.slidev-layout.mosaic.has-header .mosaic-grid {
+  margin-top: 0.9rem;
+}
+
+.deck-mosaic {
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+
+.deck-mosaic-rows {
+  flex-direction: column;
+}
+
+.deck-mosaic-cols {
+  flex-direction: row;
+}
+
+.deck-mosaic-group {
+  display: flex;
+  min-width: 0;
+  min-height: 0;
+}
+
+.deck-mosaic-rows > .deck-mosaic-group {
+  flex-direction: row;
+}
+
+.deck-mosaic-cols > .deck-mosaic-group {
+  flex-direction: column;
+}
+
+.deck-mosaic-item {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  margin: 0;
+  overflow: hidden;
+  border-radius: var(--deck-mosaic-radius, 0);
+  background: var(--google-surface);
+}
+
+.deck-mosaic-item img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.deck-mosaic-chip {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  max-width: calc(100% - 20px);
+}
+
+/* ------------------------------------------------------------ route map */
+
+.deck-map {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+  background: var(--deck-map-land);
+  font-family: var(--deck-font-sans);
+}
+
+.deck-map svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.deck-map-land { fill: var(--deck-map-land); }
+.deck-map-area { stroke: none; }
+.deck-map-water { fill: var(--deck-map-water); }
+.deck-map-market { fill: #feefc3; stroke: rgba(249, 171, 0, 0.6); }
+.deck-map-temple { fill: #fad2cf; stroke: rgba(234, 67, 53, 0.55); }
+
+.deck-map-casing path,
+.deck-map-street path,
+.deck-map-route,
+.deck-map-route-casing,
+.deck-map-route-rest {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.deck-map-casing path { stroke: var(--deck-map-casing); }
+.deck-map-street path { stroke: white; }
+
+.deck-map-street-labels text {
+  fill: #80868b;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  dominant-baseline: central;
+  paint-order: stroke;
+  stroke: rgba(255, 255, 255, 0.92);
+  stroke-linejoin: round;
+  stroke-width: 3px;
+  text-anchor: middle;
+}
+
+.deck-map-street-labels text.vertical {
+  writing-mode: vertical-rl;
+}
+
+.deck-map-street-labels text.water {
+  fill: #6f9ae0;
+  font-size: 14px;
+  letter-spacing: 0.6em;
+  stroke: none;
+}
+
+.deck-map-route-rest { stroke: #9aa0a6; }
+.deck-map-route-casing { stroke: white; }
+.deck-map-route { stroke: var(--google-blue); }
+
+.deck-map-dot {
+  fill: var(--google-blue);
+  stroke: white;
+}
+
+.deck-map-stop.is-active .deck-map-dot { fill: var(--google-red); }
+.deck-map-halo { fill: rgba(234, 67, 53, 0.2); }
+
+.deck-map-stop.is-todo .deck-map-dot {
+  fill: white;
+  stroke: #9aa0a6;
+}
+
+.deck-map-num {
+  fill: white;
+  font-family: 'Google Sans', 'Product Sans', Arial, sans-serif;
+  font-weight: 700;
+  dominant-baseline: central;
+  text-anchor: middle;
+}
+
+.deck-map-stop.is-todo .deck-map-num { fill: var(--google-muted); }
+
+.deck-map-label rect {
+  fill: white;
+  filter: drop-shadow(0 1px 1.5px rgba(60, 64, 67, 0.3)) drop-shadow(0 2px 6px rgba(60, 64, 67, 0.15));
+}
+
+.deck-map-label text {
+  fill: var(--google-ink);
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  dominant-baseline: central;
+  text-anchor: middle;
+}
+
+.deck-map-stop.is-active .deck-map-label rect { fill: var(--google-red); }
+.deck-map-stop.is-active .deck-map-label text { fill: white; }
+.deck-map-stop.is-todo .deck-map-label text { fill: var(--google-muted); }
+
+.deck-map-scale {
+  position: absolute;
+  bottom: 8px;
+  left: 12px;
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+  color: var(--google-muted);
+  font-size: 10.5px;
+  font-weight: 500;
+  line-height: 1;
+}
+
+.deck-map-scale i {
+  height: 5px;
+  border: 1.5px solid var(--google-muted);
+  border-top: 0;
+}
+
+.deck-map-credit {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  padding: 2px 7px 2px 8px;
+  border-top-left-radius: 6px;
+  background: rgba(255, 255, 255, 0.78);
+  color: var(--google-muted);
+  font-size: 10px;
+  line-height: 1.4;
+}
+
+.deck-map-compact .deck-map-credit {
+  padding: 0 4px;
+  font-size: 7px;
+}
+
+/* A map alone on a `layout: full` slide goes edge to edge */
+.slidev-layout.full:has(> .deck-map) {
+  padding: 0;
+}
