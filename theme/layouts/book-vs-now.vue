@@ -43,12 +43,8 @@ const hasNote = computed(() => hasSlotContent(slots.default))
 // Strip brackets the author typed; the layout draws its own (hanging) ones.
 const body = computed(() => String(props.quote ?? '').trim().replace(/^[「『“"]+/, '').replace(/[」』”"]+$/, ''))
 
-const sizeClass = computed(() => {
-  const n = [...body.value].length
-  if (props.vertical)
-    return n <= 14 ? 'q-l' : n <= 20 ? 'q-m' : 'q-s'
-  return n <= 14 ? 'q-l' : n <= 22 ? 'q-m' : n <= 32 ? 'q-s' : 'q-xs'
-})
+// One size for every book quote so the comparison slides read as a set.
+const sizeClass = computed(() => 'q-m')
 </script>
 
 <template>
