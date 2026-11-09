@@ -12,7 +12,7 @@ const props = withDefaults(defineProps<{
   image: string
   /** Focal point for cropping (CSS object-position) */
   position?: string
-  /** Stop chip above the quote, e.g. "03 永樂市場" */
+  /** Place name shown on the photo chip, e.g. "03 永樂市場" (leading stop number is dropped) */
   label?: string
   stop?: string | number
   /** Chip on the quote side */
@@ -54,10 +54,6 @@ const sizeClass = computed(() => {
 <template>
   <div class="slidev-layout book-vs-now" :class="{ reverse: props.reverse, vertical: props.vertical }">
     <div class="bvn-text">
-      <div class="bvn-tags">
-        <PhotoChip class="bvn-chip-book" :label="props.bookLabel" dot="red" size="sm" />
-        <PhotoChip v-if="props.label || props.stop" class="bvn-chip-stop" :label="props.label" :stop="props.stop" size="sm" />
-      </div>
       <blockquote class="bvn-quote" :class="sizeClass">
         <span class="bvn-open" aria-hidden="true">「</span>{{ body }}<span class="bvn-close" aria-hidden="true">」</span>
       </blockquote>
@@ -70,7 +66,7 @@ const sizeClass = computed(() => {
     </div>
     <figure class="bvn-photo">
       <img :src="src" :style="{ objectPosition: props.position }" alt="">
-      <PhotoChip class="bvn-chip-now" :label="[props.nowLabel, props.date].filter(Boolean).join(' ')" dot="blue" />
+      <PhotoChip class="bvn-chip-now" :label="props.label ? props.label.replace(/^\d+\s*/, '') : [props.nowLabel, props.date].filter(Boolean).join(' ')" dot="blue" />
       <figcaption v-if="props.caption">
         {{ props.caption }}
       </figcaption>
