@@ -79,7 +79,39 @@ clicks: 6
 
 ::figure::
 
-<RouteMap :active="$clicks" draw labels="active" />
+<div class="stop-split">
+  <div class="stop-map"><RouteMap :active="$clicks" draw labels="active" /></div>
+  <div class="stop-panel">
+    <template v-for="(s, i) in [
+      { img: '/images/web/1-yongtai.jpg', name: '永泰食品行', credit: '圖／TVBS 新聞（2026.9）' },
+      { img: '/images/web/2-zisheng.jpg', name: '滋生青草店', credit: '圖／Openbook 閱讀誌（2021）' },
+      { img: '/images/web/3-yongle-market.jpg', name: '永樂市場', credit: '毛貓大少爺／Wikimedia Commons, CC BY-SA 2.0' },
+      { img: '/images/web/4-watsons.jpg', name: '小藝埕（原屈臣氏大藥房）', credit: 'Chi-Hung Lin／Wikimedia Commons, CC BY-SA 2.0' },
+      { img: '/images/web/5-shengji.jpg', name: '生記藥行', credit: '圖／Openbook 閱讀誌（2021）' },
+      { img: '/images/web/6-xiahai.jpg', name: '臺北霞海城隍廟', credit: 'nakashi／Wikimedia Commons, CC BY-SA 2.0' },
+    ]" :key="i">
+      <figure v-if="$clicks === i + 1" class="stop-card">
+        <img :src="s.img" :alt="s.name" />
+        <figcaption><b>{{ String(i + 1).padStart(2, '0') }}</b> {{ s.name }}</figcaption>
+        <div class="stop-credit">{{ s.credit }}</div>
+      </figure>
+    </template>
+    <div v-if="$clicks === 0" class="stop-hint">事前資料・網路照片</div>
+  </div>
+</div>
+
+<style>
+.stop-split { display: flex; gap: 1.2rem; width: 100%; height: 100%; }
+.stop-map { flex: 1.35; min-width: 0; height: 100%; }
+.stop-panel { flex: 1; min-width: 0; height: 100%; display: flex; align-items: center; }
+.stop-card { margin: 0; width: 100%; animation: stop-in .35s ease; }
+.stop-card img { width: 100%; height: 15.5rem; object-fit: cover; border-radius: 12px; box-shadow: var(--google-shadow); display: block; }
+.stop-card figcaption { margin-top: .6rem; font-size: 1.15rem; font-weight: 600; color: var(--google-ink); }
+.stop-card figcaption b { color: var(--google-blue); margin-right: .35rem; }
+.stop-credit { margin-top: .15rem; font-size: 11px; color: var(--google-muted); }
+.stop-hint { width: 100%; text-align: center; color: var(--google-muted); font-size: .95rem; }
+@keyframes stop-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+</style>
 
 <!--
 【講者：鄭宇晨】
