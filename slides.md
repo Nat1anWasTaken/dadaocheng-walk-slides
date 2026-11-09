@@ -190,32 +190,40 @@ TODO(選用)：N2 若時間允許可加一句「老師講義裡穿旗袍的那�
 -->
 
 ---
-layout: three-cards
-cardNumbers: ['✓', '✗', '?']
-cardColors: ['green', 'red', 'yellow']
+layout: default
 ---
 
-# AI 行程，現場打分
+# 替 AI 改作業
 
-::card1::
-
-<div class="big">路線</div>
-
-::card2::
-
-<div class="big">張冠李戴</div>
-
-::card3::
-
-<div class="big">誰還開著</div>
+<div class="paper">
+  <div class="line">
+    <p>延平北路 → 民樂街 → 永樂市場 → 迪化街 → 生記藥行 → <span v-mark="{ at: 1, color: '#d93025', type: 'circle' }">霞海城隍廟</span></p>
+    <div class="pen" v-click="1">路線走得通</div>
+  </div>
+  <div class="line">
+    <p>第三代姚勝雄……<span v-mark="{ at: 2, color: '#d93025', type: 'strike-through' }">在父親原本不贊成的情況下</span>推動2017年店面改造</p>
+    <div class="pen" v-click="2">這是建翔蔬菜的故事</div>
+  </div>
+  <div class="line">
+    <p>位置：迪化街一段21號；林良號史料位置為<span v-mark="{ at: 3, color: '#d93025', type: 'underline' }">一樓1506號攤</span></p>
+    <div class="pen" v-click="3">門牌在，人呢？</div>
+  </div>
+  <div class="src">摘自出發前 AI 整理的〈探勘地點清單〉（10/21）</div>
+</div>
 
 <style>
-.big { font-size: 52px; font-weight: 700; line-height: 1.2; margin-top: 0; letter-spacing: 0.02em; }
+.paper { margin-top: 32px; padding: 20px 32px 20px; background: #fffdf7; border: 1px solid var(--google-border); border-radius: 6px; box-shadow: var(--google-shadow); font-family: 'Noto Serif TC Deck', serif; }
+.paper .line { display: flex; align-items: baseline; justify-content: space-between; gap: 24px; padding: 24px 0; border-bottom: 1px dashed #e6dfcf; }
+.paper .line:last-of-type { border-bottom: none; }
+.paper p { margin: 0; font-size: 19px; white-space: nowrap; color: var(--google-ink); }
+.paper .pen { flex: none; font-size: 19px; color: #d93025; transform: rotate(-3deg); white-space: nowrap; }
+.paper .src { margin-top: 10px; font-family: 'Google Sans', sans-serif; font-size: 12px; color: var(--google-muted); }
 </style>
 
 <!--
 【講者：董兆陽】
 回頭替 AI 打分數。路線排得順，書裡的故事也抓到大概，這是它做對的；但它也會自己加油添醋。做錯的是張冠李戴：它把市場裡另一家菜攤「父親反對」的故事，安到青草店頭上。它最不知道的，是今天誰還開著。作者認的是人臉，AI 給的是門牌。
+備註：點擊三次，紅筆依序畫上（圈、刪、底線）。
 備註：AI 行程清單確實寫了姚德和第三代在父親原本不贊成下推動 2017 年改造，所以「它說」是準確的；經查，父親反對的故事屬於建翔蔬菜（王建翔與父親），來源為市場處原文。
 -->
 
@@ -298,7 +306,6 @@ kicker: 組員心得
 ---
 layout: reflection
 kicker: 組員心得
-class: roomy
 ---
 
 ::name::
@@ -338,11 +345,9 @@ caption: 臺北霞海城隍廟　2026.10.26
 scrim: light
 ---
 
-# 正在告別的路線
-
 <!--
 【講者：董兆陽】
-這是我們在城隍廟前的合照。書裡是一條三代女性的購物路線；我們走到的，是一條正在告別的路線。老店會關，但那杯苦茶有多苦，我們會記得。謝謝大家。
+這是我們在城隍廟前的合照。老店會關，但那杯苦茶有多苦，我們會記得。謝謝大家。
 TODO(合照)：合照只有 4 人。作業要求全組到此一遊，若有第五位組員，請找他入鏡的照片或準備一句說明。
 TODO(同意)：上台前確認 4 位組員都同意自己的臉出現在公開網站上。
 -->
