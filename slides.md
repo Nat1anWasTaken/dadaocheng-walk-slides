@@ -219,7 +219,7 @@ TODO(董兆陽心得)：約 60 字，請董兆陽用自己的話補一段，不�
 
 ---
 layout: photo
-image: /images/06-xiahai-temple-05-group-selfie-best.jpg
+image: /images/06-xiahai-temple-04-group-selfie.jpg
 position: 50% 45%
 caption: 臺北霞海城隍廟　2026.10.26
 scrim: light
