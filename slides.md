@@ -33,6 +33,57 @@ TODO(確認)：N5 建議說「書出版五年後」較精確（文章 2018 年�
 -->
 
 ---
+layout: default
+---
+
+# 組員貢獻
+
+<div class="contrib">
+  <svg class="donut" viewBox="0 0 42 42" role="img" aria-label="四位組員各占 25%">
+    <circle v-for="(m, i) in members" :key="m.name" cx="21" cy="21" r="15.9155" fill="none"
+      :stroke="m.color" stroke-width="7" :stroke-dasharray="`24.6 75.4`"
+      :stroke-dashoffset="25 - i * 25 - 0.2" />
+    <text x="21" y="20.2" text-anchor="middle" class="donut-big">4 人</text>
+    <text x="21" y="25.4" text-anchor="middle" class="donut-small">各 25%</text>
+  </svg>
+  <ul class="contrib-list">
+    <li v-for="m in members" :key="m.name">
+      <span class="dot" :style="{ background: m.color }" />
+      <b>{{ m.name }}</b>
+      <span class="pct">25%</span>
+      <span class="tasks">{{ m.tasks.join('、') }}</span>
+    </li>
+  </ul>
+</div>
+
+<script setup>
+const members = [
+  { name: '董兆陽', color: 'var(--google-blue)', tasks: ['簡報製作與排版', 'AI 內容查核'] },
+  { name: '鄭宇晨', color: 'var(--google-red)', tasks: ['文本精讀與引文摘錄', '走讀路線規劃'] },
+  { name: '陳煇勝', color: 'var(--google-yellow)', tasks: ['現場拍照紀錄', '講稿撰寫與彩排'] },
+  { name: '李亦宸', color: 'var(--google-green)', tasks: ['景點資料蒐集', '老照片與授權查找'] },
+]
+</script>
+
+<style>
+.contrib { display: flex; align-items: center; gap: 3rem; margin-top: 2.2rem; }
+.contrib .donut { flex: none; width: 15rem; height: 15rem; }
+.contrib .donut-big { font-size: 5px; font-weight: 700; fill: var(--google-ink); }
+.contrib .donut-small { font-size: 3px; fill: var(--google-muted); }
+.contrib-list { list-style: none; margin: 0; padding: 0; flex: 1; }
+.contrib-list li { display: grid; grid-template-columns: 1rem 4.5rem 3.5rem 1fr; align-items: center; gap: .6rem; padding: .7rem 0; border-bottom: 1px solid var(--google-border); font-size: 20px; }
+.contrib-list li:last-child { border-bottom: none; }
+.contrib-list .dot { width: .85rem; height: .85rem; border-radius: 50%; }
+.contrib-list .pct { color: var(--google-muted); font-variant-numeric: tabular-nums; }
+.contrib-list .tasks { color: var(--google-ink); font-size: 18px; text-align: left; }
+</style>
+
+<!--
+【講者：董兆陽】
+這是我們的分工，四個人各負責兩項，比例平均。
+-->
+
+---
 layout: quote
 ---
 
