@@ -1,5 +1,5 @@
 {
-  "note": "Stop lat/lon from the photo catalog track.json (OSM geocodes of the stops, 2026-10-26 walk). 03 has a via at the 迪化街/永昌街 corner (walked 01-02-corner-03-04-05-06). CRnall_134840557 GPS is stale and not used. Rerun 'python3 scripts/map-data.py route' after edits.",
+  "note": "Stop lat/lon from the photo catalog track.json (OSM geocodes of the stops, 2026-10-26 walk). 03 has a via at the 迪化街/永昌街 corner (walked 01-02-corner-03-04-05-06). CRnall_134840557 GPS is stale and not used. Path hand-trimmed to remove dead-end spurs (no detour into the market block); rerunning 'python3 scripts/map-data.py route' regenerates the untrimmed path.",
   "view": [
     25.0541,
     121.5092,
@@ -106,58 +106,6 @@
       121.510028
     ],
     [
-      25.055486,
-      121.510223
-    ],
-    [
-      25.055517,
-      121.510636
-    ],
-    [
-      25.055529,
-      121.510915
-    ],
-    [
-      25.055382,
-      121.510926
-    ],
-    [
-      25.05511,
-      121.510946
-    ],
-    [
-      25.054899,
-      121.510964
-    ],
-    [
-      25.05511,
-      121.510946
-    ],
-    [
-      25.055382,
-      121.510926
-    ],
-    [
-      25.055529,
-      121.510915
-    ],
-    [
-      25.055517,
-      121.510636
-    ],
-    [
-      25.055486,
-      121.510223
-    ],
-    [
-      25.055471,
-      121.510028
-    ],
-    [
-      25.055471,
-      121.510028
-    ],
-    [
       25.055325,
       121.510044
     ],
@@ -182,13 +130,9 @@
       121.510028
     ],
     [
-      25.055471,
-      121.510028
-    ],
-    [
       25.055486,
       121.510223
     ]
   ],
-  "pathLengthM": 762
+  "pathLengthM": 445
 }
