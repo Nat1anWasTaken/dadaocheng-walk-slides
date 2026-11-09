@@ -91,7 +91,7 @@ clicks: 6
       { img: '/images/web/6-xiahai.jpg', name: '臺北霞海城隍廟', credit: 'nakashi／Wikimedia Commons, CC BY-SA 2.0' },
     ]" :key="i">
       <figure v-if="$clicks === i + 1" class="stop-card">
-        <img :src="s.img" :alt="s.name" />
+        <img :src="base + s.img.replace(/^\//, '')" :alt="s.name" />
         <figcaption><b>{{ String(i + 1).padStart(2, '0') }}</b> {{ s.name }}</figcaption>
         <div class="stop-credit">{{ s.credit }}</div>
       </figure>
@@ -99,6 +99,11 @@ clicks: 6
     <div v-if="$clicks === 0" class="stop-hint">事前資料・網路照片</div>
   </div>
 </div>
+
+<script setup>
+// Dynamic :src isn't rewritten by Vite, so prefix the deploy base (ends with '/') ourselves.
+const base = import.meta.env.BASE_URL
+</script>
 
 <style>
 .stop-split { display: flex; gap: 1.2rem; width: 100%; height: 100%; }
