@@ -44,7 +44,7 @@ layout: default
       :stroke="m.color" stroke-width="7" :stroke-dasharray="`24.6 75.4`"
       :stroke-dashoffset="25 - i * 25 - 0.2" />
     <text x="21" y="20.2" text-anchor="middle" class="donut-big">4 人</text>
-    <text x="21" y="25.4" text-anchor="middle" class="donut-small">各 25%</text>
+    <text x="21" y="25.4" text-anchor="middle" class="donut-small">我們合作無間！</text>
   </svg>
   <ul class="contrib-list">
     <li v-for="m in members" :key="m.name">
@@ -69,7 +69,7 @@ const members = [
 .contrib { display: flex; align-items: center; gap: 3rem; margin-top: 2.2rem; }
 .contrib .donut { flex: none; width: 15rem; height: 15rem; }
 .contrib .donut-big { font-size: 5px; font-weight: 700; fill: var(--google-ink); }
-.contrib .donut-small { font-size: 3px; fill: var(--google-muted); }
+.contrib .donut-small { font-size: 2.6px; fill: var(--google-muted); }
 .contrib-list { list-style: none; margin: 0; padding: 0; flex: 1; }
 .contrib-list li { display: grid; grid-template-columns: 1rem 4.5rem 3.5rem 1fr; align-items: center; gap: .6rem; padding: .7rem 0; border-bottom: 1px solid var(--google-border); font-size: 20px; }
 .contrib-list li:last-child { border-bottom: none; }
