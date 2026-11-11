@@ -6,18 +6,12 @@ aspectRatio: 16/9
 canvasWidth: 980
 exportFilename: dadaocheng-walk
 layout: cover
-kicker: 文學經典閱讀・期中報告
 team: 第 X 組
 members:
   - 董兆陽
   - 鄭宇晨
   - 陳煇勝
   - 李亦宸
-topics:
-  - label: 洪愛珠《老派少女購物路線》
-    color: red
-  - label: 大稻埕
-    color: blue
 meta: 2026.11.11
 qr: https://nath.tw/dadaocheng-walk-slides/
 qrLabel: 掃描看簡報
