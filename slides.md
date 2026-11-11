@@ -29,14 +29,15 @@ layout: default
 
 <div class="contrib">
   <svg class="donut" viewBox="0 0 42 42" role="img" aria-label="四位組員各占 25%">
-    <circle v-for="(m, i) in members" :key="m.name" cx="21" cy="21" r="15.9155" fill="none"
+    <circle class="donut-track" cx="21" cy="21" r="15.9155" fill="none" stroke-width="7" />
+    <circle v-for="(m, i) in members" :key="m.name" class="donut-seg" :style="{ '--i': i }" cx="21" cy="21" r="15.9155" fill="none"
       :stroke="m.color" stroke-width="7" :stroke-dasharray="`24.6 75.4`"
       :stroke-dashoffset="25 - i * 25 - 0.2" />
     <text x="21" y="20.2" text-anchor="middle" class="donut-big">4 人</text>
     <text x="21" y="25.4" text-anchor="middle" class="donut-small">我們合作無間！</text>
   </svg>
   <ul class="contrib-list">
-    <li v-for="m in members" :key="m.name">
+    <li v-for="(m, i) in members" :key="m.name" :style="{ '--i': i }">
       <span class="dot" :style="{ background: m.color }" />
       <b>{{ m.name }}</b>
       <span class="pct">25%</span>
@@ -65,6 +66,12 @@ const members = [
 .contrib-list .dot { width: .85rem; height: .85rem; border-radius: 50%; }
 .contrib-list .pct { color: var(--google-muted); font-variant-numeric: tabular-nums; }
 .contrib-list .tasks { color: var(--google-ink); font-size: 18px; text-align: left; }
+.contrib .donut-track { stroke: var(--google-blue-soft); }
+/* The cover's ring flies in and becomes this donut (motion.css); then each share is drawn in turn */
+html[data-deck-nav='forward'] .contrib .donut-seg { animation: donut-share 720ms var(--deck-ease-out) calc(420ms + var(--i) * 120ms) both; }
+html[data-deck-nav='forward'] .contrib .donut text { animation: deck-fade-in 500ms ease-out 900ms both; }
+html[data-deck-nav='forward'] .contrib-list li { animation: deck-rise 560ms var(--deck-ease-out) calc(600ms + var(--i) * 110ms) both; }
+@keyframes donut-share { from { stroke-dasharray: 0 100; } }
 </style>
 
 ---
@@ -138,42 +145,51 @@ clicks: 6
 ::figure::
 
 <div class="stop-split">
-  <div class="stop-map"><RouteMap :active="$clicks" draw labels="active" /></div>
+  <div class="stop-map"><RouteMap :active="$clicks" draw labels="active" :duration="900" /></div>
   <div class="stop-panel">
-    <template v-for="(s, i) in [
-      { img: '/images/web/1-yongtai.jpg', name: '永泰食品行', credit: '圖／TVBS 新聞（2026.9）' },
-      { img: '/images/web/2-zisheng.jpg', name: '滋生青草店', credit: '圖／Openbook 閱讀誌（2021）' },
-      { img: '/images/web/3-yongle-market.jpg', name: '永樂市場', credit: '毛貓大少爺／Wikimedia Commons, CC BY-SA 2.0' },
-      { img: '/images/web/4-watsons.jpg', name: '小藝埕（原屈臣氏大藥房）', credit: 'Chi-Hung Lin／Wikimedia Commons, CC BY-SA 2.0' },
-      { img: '/images/web/5-shengji.jpg', name: '生記藥行', credit: '圖／Openbook 閱讀誌（2021）' },
-      { img: '/images/web/6-xiahai.jpg', name: '臺北霞海城隍廟', credit: 'nakashi／Wikimedia Commons, CC BY-SA 2.0' },
-    ]" :key="i">
-      <figure v-if="$clicks === i + 1" class="stop-card">
-        <img :src="base + s.img.replace(/^\//, '')" :alt="s.name" />
-        <figcaption><b>{{ String(i + 1).padStart(2, '0') }}</b> {{ s.name }}</figcaption>
-        <div class="stop-credit">{{ s.credit }}</div>
+    <Transition name="stop-swap">
+      <figure v-if="$clicks >= 1 && stops[$clicks - 1]" :key="$clicks" class="stop-card">
+        <img :src="base + stops[$clicks - 1].img.replace(/^\//, '')" :alt="stops[$clicks - 1].name" />
+        <figcaption><b>{{ String($clicks).padStart(2, '0') }}</b> {{ stops[$clicks - 1].name }}</figcaption>
+        <div class="stop-credit">{{ stops[$clicks - 1].credit }}</div>
       </figure>
-    </template>
-    <div v-if="$clicks === 0" class="stop-hint">事前資料・網路照片</div>
+      <div v-else class="stop-hint">事前資料・網路照片</div>
+    </Transition>
   </div>
 </div>
 
 <script setup>
 // Dynamic :src isn't rewritten by Vite, so prefix the deploy base (ends with '/') ourselves.
 const base = import.meta.env.BASE_URL
+const stops = [
+  { img: '/images/web/1-yongtai.jpg', name: '永泰食品行', credit: '圖／TVBS 新聞（2026.9）' },
+  { img: '/images/web/2-zisheng.jpg', name: '滋生青草店', credit: '圖／Openbook 閱讀誌（2021）' },
+  { img: '/images/web/3-yongle-market.jpg', name: '永樂市場', credit: '毛貓大少爺／Wikimedia Commons, CC BY-SA 2.0' },
+  { img: '/images/web/4-watsons.jpg', name: '小藝埕（原屈臣氏大藥房）', credit: 'Chi-Hung Lin／Wikimedia Commons, CC BY-SA 2.0' },
+  { img: '/images/web/5-shengji.jpg', name: '生記藥行', credit: '圖／Openbook 閱讀誌（2021）' },
+  { img: '/images/web/6-xiahai.jpg', name: '臺北霞海城隍廟', credit: 'nakashi／Wikimedia Commons, CC BY-SA 2.0' },
+]
 </script>
 
 <style>
 .stop-split { display: flex; gap: 1.2rem; width: 100%; height: 100%; }
 .stop-map { flex: 1.35; min-width: 0; height: 100%; }
-.stop-panel { flex: 1; min-width: 0; height: 100%; display: flex; align-items: center; }
-.stop-card { margin: 0; width: 100%; animation: stop-in .35s ease; }
+/* Cards share one grid cell, so the outgoing card leaves in place while the next arrives */
+.stop-panel { flex: 1; min-width: 0; height: 100%; display: grid; align-items: center; }
+.stop-panel > * { grid-area: 1 / 1; }
+.stop-card { margin: 0; width: 100%; }
 .stop-card img { width: 100%; height: 15.5rem; object-fit: cover; border-radius: 12px; box-shadow: var(--google-shadow); display: block; }
 .stop-card figcaption { margin-top: .6rem; font-size: 1.15rem; font-weight: 600; color: var(--google-ink); }
 .stop-card figcaption b { color: var(--google-blue); margin-right: .35rem; }
 .stop-credit { margin-top: .15rem; font-size: 11px; color: var(--google-muted); }
 .stop-hint { width: 100%; text-align: center; color: var(--google-muted); font-size: .95rem; }
-@keyframes stop-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+/* Next stop rises in as the map line sets off toward it; going back, the stops sink back the other way */
+.stop-swap-enter-active { transition: opacity .45s ease-out .16s, translate .7s var(--deck-ease-out) .16s; }
+.stop-swap-leave-active { transition: opacity .2s ease-in, translate .28s var(--deck-ease-in); }
+.stop-swap-enter-from { opacity: 0; translate: 0 18px; }
+.stop-swap-leave-to { opacity: 0; translate: 0 -10px; }
+#slideshow.slidev-nav-go-backward .stop-swap-enter-from { translate: 0 -18px; }
+#slideshow.slidev-nav-go-backward .stop-swap-leave-to { translate: 0 10px; }
 </style>
 
 <!--
@@ -266,6 +282,7 @@ label: 06 霞海城隍廟
 caption: 不知道順序，看人流跟著拜
 map: 6
 scrim: strong
+motion: linger
 ---
 
 <!--
@@ -291,6 +308,7 @@ layout: quote
 ---
 layout: reflection
 kicker: 組員心得
+clicks: 1
 ---
 
 ::name::
@@ -299,7 +317,7 @@ kicker: 組員心得
 
 ::default::
 
-<v-switch unmount>
+<ReflectionPages>
 <template #0>
 
 跟著洪愛珠走大稻埕，我原以為在尋找舊時光，實際卻像在追趕一段正在遠去的記憶。延平北路二段三十六巷裡，永泰食品行舊址仍在，店卻已歇業，只剩賣烏魚子的攤子。我站在巷口，試著把書中外婆買甘納豆、作者買蛋酥花生的畫面疊上眼前冷清，卻怎麼也拼不回來。我發現走讀不是朝聖打卡，而是走到書中發生過的地方，看它如今變成什麼模樣。
@@ -314,7 +332,7 @@ kicker: 組員心得
 這條路線其實是一條告別的路線。我們無法阻止老店歇業，卻能在消失之前走進巷弄，記住一塊招牌、一種氣味，和有人生活過的證明。
 
 </template>
-</v-switch>
+</ReflectionPages>
 
 ---
 layout: reflection
@@ -351,6 +369,7 @@ kicker: 組員心得
 ---
 layout: reflection
 kicker: 組員心得
+clicks: 1
 ---
 
 ::name::
@@ -359,7 +378,7 @@ kicker: 組員心得
 
 ::default::
 
-<v-switch unmount>
+<ReflectionPages>
 <template #0>
 
 在準備這次走讀時，我對大稻埕的印象，主要是迪化街的紅磚老屋和傳統商店，原本以為只要沿著洪愛珠的《老派少女購物路線》找幾家老店，就能看見書裡的風景。真正走進延平北路二段的巷子，眼前卻是機車、老住宅和施工圍籬，完全不像我想像中整齊的懷舊街景。書中提到，作者小時候和外婆、媽媽會從這裡穿過，順路到永泰食品行買甘納豆、蛋酥花生；如今那家老店已經歇業，我們只能試著從眼前的街道想像她當年的記憶。原來走讀不一定是找到書裡描述的東西，有時反而是發現它已經不在了。
@@ -374,7 +393,7 @@ kicker: 組員心得
 最後走到霞海城隍廟，和組員留下合照。這一趟最讓我有感的，其實不是走過多少個景點，而是開始理解洪愛珠為什麼能從日常採買寫出一整篇故事。對她而言，購物路線連著家人的記憶；對我們而言，這次走訪也讓原本只是地圖上幾條街的地方，多了可以記住的畫面與故事。
 
 </template>
-</v-switch>
+</ReflectionPages>
 
 ---
 layout: photo
