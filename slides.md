@@ -1,6 +1,6 @@
 ---
 theme: ./theme
-title: 老鋪還在嗎？跟著洪愛珠走大稻埕
+title: 跟著洪愛珠走大稻埕
 colorSchema: light
 aspectRatio: 16/9
 canvasWidth: 980
