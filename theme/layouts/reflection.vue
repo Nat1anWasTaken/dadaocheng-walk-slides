@@ -62,6 +62,41 @@ defineProps<{
   line-height: 1.9;
 }
 
+/*
+ * Long reflections are split into pages with <v-switch transition="reflection-turn">.
+ * The outgoing page fades up and out first (lifted out of flow so the two never
+ * stack), then the next page fades in from slightly below.
+ */
+.reflection-body {
+  position: relative;
+}
+
+.reflection-body :deep(.reflection-turn-leave-active) {
+  position: absolute;
+  top: 0;
+  left: 1.2rem;
+  right: 0;
+  transition:
+    opacity 0.2s ease-in,
+    transform 0.2s ease-in;
+}
+
+.reflection-body :deep(.reflection-turn-enter-active) {
+  transition:
+    opacity 0.3s ease-out 0.18s,
+    transform 0.3s ease-out 0.18s;
+}
+
+.reflection-body :deep(.reflection-turn-enter-from) {
+  opacity: 0;
+  transform: translateY(8px);
+}
+
+.reflection-body :deep(.reflection-turn-leave-to) {
+  opacity: 0;
+  transform: translateY(-8px);
+}
+
 .reflection-body :deep(.pending) {
   color: var(--google-muted);
   font-family: inherit;
