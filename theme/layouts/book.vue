@@ -13,16 +13,20 @@ const hasQuote = computed(() => hasSlotContent(slots.quote))
 </script>
 
 <template>
-  <div class="slidev-layout book">
+  <div class="slidev-layout book" :class="{ 'is-quoting': hasQuote && $clicks >= 1 }">
     <div class="book-text">
       <slot />
     </div>
     <div class="book-stage">
       <img :src="src" alt="">
     </div>
-    <!-- `::quote::` takes over the whole page on the first click (set `clicks: 1`) -->
-    <Transition name="book-quote">
+    <!--
+      `::quote::` takes over the whole page on the first click (set `clicks: 1`).
+      The book drifts out of focus as the line it holds comes into focus.
+    -->
+    <Transition name="book-quote" :duration="{ enter: 1150, leave: 320 }">
       <div v-if="hasQuote && $clicks >= 1" class="slidev-layout quote book-quote">
+        <span class="deck-quote-mark" aria-hidden="true">“</span>
         <div class="google-layout-inner">
           <slot name="quote" />
         </div>
@@ -66,20 +70,64 @@ const hasQuote = computed(() => hasSlotContent(slots.quote))
   object-fit: contain;
 }
 
+.book-text,
+.book-stage {
+  transition:
+    opacity 0.5s var(--deck-ease-out),
+    filter 0.6s var(--deck-ease-out),
+    scale 0.8s var(--deck-ease-out);
+}
+
+.book.is-quoting .book-text,
+.book.is-quoting .book-stage {
+  opacity: 0;
+  filter: blur(10px);
+  scale: 0.97;
+}
+
+.book.is-quoting .book-stage {
+  scale: 1.04;
+}
+
 .book-quote {
   position: absolute;
   inset: 0;
   z-index: 1;
-  background: white;
+  background: none;
 }
 
-.book-quote-enter-active,
+.book-quote-enter-active .deck-quote-mark {
+  transition:
+    opacity 0.6s var(--deck-ease-out) 0.18s,
+    scale 0.7s var(--deck-ease-out) 0.18s,
+    translate 0.7s var(--deck-ease-out) 0.18s;
+}
+
+.book-quote-enter-active :deep(h1) {
+  transition:
+    opacity 0.85s var(--deck-ease-out) 0.3s,
+    filter 0.85s var(--deck-ease-out) 0.3s;
+}
+
+.book-quote-enter-from .deck-quote-mark {
+  opacity: 0;
+  scale: 0.7;
+  translate: 0 6px;
+}
+
+.book-quote-enter-from :deep(h1) {
+  opacity: 0;
+  filter: blur(8px);
+}
+
 .book-quote-leave-active {
-  transition: opacity 0.4s ease;
+  transition:
+    opacity 0.3s var(--deck-ease-in),
+    filter 0.3s var(--deck-ease-in);
 }
 
-.book-quote-enter-from,
 .book-quote-leave-to {
   opacity: 0;
+  filter: blur(6px);
 }
 </style>
