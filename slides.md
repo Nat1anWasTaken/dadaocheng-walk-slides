@@ -442,7 +442,7 @@ layout: default
 
 <div class="google-qr-row">
   <QrCode url="https://github.com/Nat1anWasTaken/dadaocheng-walk-slides" label="GitHub Repo" size="12rem" />
-  <QrCode url="https://sli.dev/" label="Slidev 官網" size="12rem" />
+  <QrCode url="https://sli.dev/" label="Slidev" size="12rem" />
 </div>
 
 <!--
