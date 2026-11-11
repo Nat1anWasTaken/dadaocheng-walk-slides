@@ -438,7 +438,7 @@ TODO(同意)：上台前確認 4 位組員都同意自己的臉出現在公開�
 layout: default
 ---
 
-# 本簡報的原始碼
+# 關於這份簡報
 
 <div class="google-qr-row">
   <QrCode url="https://github.com/Nat1anWasTaken/dadaocheng-walk-slides" label="GitHub Repo" size="12rem" />
