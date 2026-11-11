@@ -270,7 +270,7 @@ body,
   isolation: isolate;
 }
 
-.slidev-layout.cover::before {
+.google-cover-ring {
   position: absolute;
   z-index: -1;
   top: -9rem;
@@ -279,10 +279,9 @@ body,
   height: 23rem;
   border: 4.5rem solid rgba(66, 133, 244, 0.1);
   border-radius: 50%;
-  content: '';
 }
 
-.slidev-layout.cover.has-background::before {
+.slidev-layout.cover.has-background .google-cover-ring {
   border-color: rgba(255, 255, 255, 0.14);
 }
 
@@ -428,12 +427,11 @@ body,
   padding: 4.4rem 6rem 4rem 7.3rem;
 }
 
-.slidev-layout.quote::before {
+.deck-quote-mark {
   position: absolute;
   top: 3.2rem;
   left: 4.2rem;
   color: var(--google-blue);
-  content: '“';
   font-size: 8rem;
   font-weight: 700;
   line-height: 1;

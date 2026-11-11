@@ -28,6 +28,7 @@ const style = computed(() => handleBackground(props.background, true))
 
 <template>
   <div class="slidev-layout cover" :class="{ 'has-background': Boolean(props.background) }" :style="style">
+    <div class="google-cover-ring" aria-hidden="true" />
     <div class="google-layout-inner">
       <div v-if="props.kicker" class="google-kicker" :class="{ light: Boolean(props.background) }">
         {{ props.kicker }}
