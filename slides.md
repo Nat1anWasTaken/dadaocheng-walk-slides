@@ -74,6 +74,20 @@ const members = [
 </style>
 
 ---
+layout: book
+image: /images/book-cover-3d.jpg
+clicks: 1
+---
+
+# 《老派少女購物路線》
+
+洪愛珠｜遠流，2021
+
+::quote::
+
+# 「當一個人已經無法讓親人的病好起來，你今天還能替她做什麼？」
+
+---
 layout: quote
 ---
 
