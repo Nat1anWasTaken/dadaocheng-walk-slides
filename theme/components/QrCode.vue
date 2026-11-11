@@ -7,7 +7,7 @@ const props = withDefaults(defineProps<{
   url: string
   /** Bold title under the code, e.g. "GitHub Repo". */
   label?: string
-  /** Small text under the label. Defaults to the URL without its scheme; pass "" to hide. */
+  /** Optional small text under the label (e.g. a short URL). Hidden by default. */
   caption?: string
   /** Rendered edge length of the code, any CSS length. */
   size?: string
@@ -39,10 +39,6 @@ const path = computed(() => {
   }
   return d
 })
-
-const captionText = computed(() =>
-  props.caption ?? props.url.replace(/^https?:\/\//, '').replace(/\/$/, ''),
-)
 </script>
 
 <template>
@@ -65,9 +61,9 @@ const captionText = computed(() =>
         <path :d="path" fill="currentColor" />
       </svg>
     </component>
-    <figcaption v-if="props.label || captionText">
+    <figcaption v-if="props.label || props.caption">
       <b v-if="props.label" class="deck-qr-label">{{ props.label }}</b>
-      <span v-if="captionText" class="deck-qr-caption">{{ captionText }}</span>
+      <span v-if="props.caption" class="deck-qr-caption">{{ props.caption }}</span>
     </figcaption>
   </figure>
 </template>
