@@ -1,0 +1,504 @@
+/*
+ * Motion. One idea runs through the deck: we are walking a route through a book.
+ *
+ * - Pages drift sideways, a few steps along the street; backward reverses it.
+ * - Whatever stays the same between two slides (a quote mark, a photo frame, the
+ *   reflection header) holds still while its contents change, so only news moves.
+ * - Book quotes come into focus and leave by blurring, like a memory.
+ * - Present-day photos settle like a camera finding its frame.
+ *
+ * Slide changes are View Transitions started in setup/main.ts, which tags <html>
+ * with data-deck-nav and data-deck-motion. Entrance choreography inside a slide only
+ * plays going forward; going back simply returns to how the slide was left.
+ */
+
+:root {
+  --deck-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --deck-ease-in: cubic-bezier(0.55, 0, 1, 0.45);
+  --deck-ease-in-out: cubic-bezier(0.7, 0, 0.25, 1);
+  --deck-ease-move: cubic-bezier(0.4, 0, 0.1, 1);
+  /* Leaving: clears quickly so old and new never read on top of each other */
+  --deck-ease-exit: cubic-bezier(0.2, 0, 0.4, 1);
+  --deck-page-out: 220ms;
+  --deck-page-delay: 160ms;
+  --deck-page-in: 620ms;
+  --deck-morph: 680ms;
+  --deck-drift: 22px;
+  /* 1 forward, -1 backward: flips every horizontal drift */
+  --deck-dir: 1;
+}
+
+:root[data-deck-nav='backward'] {
+  --deck-dir: -1;
+}
+
+/* ------------------------------------------------------------ shared keyframes */
+
+@keyframes deck-fade-in {
+  from { opacity: 0; }
+}
+
+@keyframes deck-fade-out {
+  to { opacity: 0; }
+}
+
+@keyframes deck-rise {
+  from { opacity: 0; translate: 0 10px; }
+}
+
+@keyframes deck-focus-in {
+  from { opacity: 0; filter: blur(8px); }
+}
+
+@keyframes deck-focus-out {
+  to { opacity: 0; filter: blur(6px); }
+}
+
+/* The photo inside its frame starts a little too close and eases back */
+@keyframes deck-settle {
+  from { scale: 1.06; }
+}
+
+/* A pane opens from the side the walk is heading toward */
+@keyframes deck-pane-open {
+  from { clip-path: inset(0 0 0 100%); }
+}
+
+/* ------------------------------------------------------------ view-transition names */
+
+/*
+ * Only the live slideshow takes part; previews and the overview are left alone
+ * (Slidev also strips names outside slide / presenter views).
+ */
+#slideshow {
+  view-transition-name: deck-slide;
+}
+
+#slideshow .google-cover-ring,
+#slideshow .contrib .donut { view-transition-name: deck-ring; }
+
+#slideshow .deck-quote-mark { view-transition-name: deck-quote-mark; }
+
+#slideshow .slidev-layout.quote h1,
+#slideshow .bvn-quote { view-transition-name: deck-quote-text; }
+
+#slideshow .slidev-layout.quote h1 + p { view-transition-name: deck-quote-source; }
+
+#slideshow .bvn-source { view-transition-name: bvn-source; }
+#slideshow .bvn-note { view-transition-name: bvn-note; }
+#slideshow .bvn-photo { view-transition-name: bvn-photo; }
+#slideshow .bvn-chip-now { view-transition-name: bvn-chip; }
+
+#slideshow .reflection-header .google-kicker { view-transition-name: reflection-kicker; }
+#slideshow .reflection-header h1 { view-transition-name: reflection-name; }
+#slideshow .reflection-content { view-transition-name: reflection-body; }
+#slideshow .reflection-rule { view-transition-name: reflection-rule; }
+
+/* Keep every morph inside the slide, so nothing spills into the letterbox or presenter UI */
+#slideshow .google-cover-ring,
+#slideshow .contrib .donut,
+#slideshow .deck-quote-mark,
+#slideshow .slidev-layout.quote h1,
+#slideshow .slidev-layout.quote h1 + p,
+#slideshow .bvn-quote,
+#slideshow .bvn-source,
+#slideshow .bvn-note,
+#slideshow .bvn-photo,
+#slideshow .bvn-chip-now,
+#slideshow .reflection-header .google-kicker,
+#slideshow .reflection-header h1,
+#slideshow .reflection-content,
+#slideshow .reflection-rule {
+  view-transition-group: deck-slide;
+}
+
+::view-transition-group-children(deck-slide) {
+  overflow: clip;
+}
+
+/* ------------------------------------------------------------ page change */
+
+::view-transition-group(*) {
+  animation-duration: var(--deck-morph);
+  animation-timing-function: var(--deck-ease-move);
+}
+
+/* Presenter chrome (notes, timer) only cross-fades */
+::view-transition-old(root) {
+  animation: deck-fade-out 200ms ease-in both;
+}
+
+::view-transition-new(root) {
+  animation: deck-fade-in 360ms ease-out both;
+}
+
+::view-transition-group(deck-slide) {
+  overflow: clip;
+}
+
+::view-transition-old(deck-slide) {
+  animation: deck-page-out var(--deck-page-out) var(--deck-ease-exit) both;
+}
+
+::view-transition-new(deck-slide) {
+  animation: deck-page-in var(--deck-page-in) var(--deck-ease-out) var(--deck-page-delay) both;
+}
+
+@keyframes deck-page-out {
+  to { opacity: 0; translate: calc(var(--deck-drift) * var(--deck-dir) * -1) 0; }
+}
+
+@keyframes deck-page-in {
+  from { opacity: 0; translate: calc(var(--deck-drift) * var(--deck-dir)) 0; }
+}
+
+/*
+ * motion: linger. Leaving the last photo of the walk for the closing quote, the
+ * street fades out slowly and loses its colour before the words arrive.
+ */
+:root[data-deck-motion='linger']::view-transition-old(deck-slide) {
+  animation: deck-linger-out 1200ms cubic-bezier(0.4, 0, 0.6, 1) both;
+}
+
+:root[data-deck-motion='linger']::view-transition-new(deck-slide) {
+  animation: deck-fade-in 900ms ease-out 500ms both;
+}
+
+:root[data-deck-motion='linger']::view-transition-new(deck-quote-text):only-child {
+  animation: deck-focus-in 1400ms var(--deck-ease-out) 800ms both;
+}
+
+:root[data-deck-motion='linger']::view-transition-new(deck-quote-mark):only-child,
+:root[data-deck-motion='linger']::view-transition-new(deck-quote-source):only-child {
+  animation-delay: 1300ms;
+}
+
+@keyframes deck-linger-out {
+  to { opacity: 0; filter: grayscale(1) brightness(1.25); scale: 1.015; }
+}
+
+/*
+ * Elements that only exist on one side of a change ride along with the page, so a
+ * named element never sits still while everything around it drifts.
+ */
+::view-transition-old(*):only-child {
+  animation: deck-page-out var(--deck-page-out) var(--deck-ease-exit) both;
+}
+
+::view-transition-new(*):only-child {
+  animation: deck-page-in var(--deck-page-in) var(--deck-ease-out) var(--deck-page-delay) both;
+}
+
+/* Text never stretches while its box morphs: show both states at their own size */
+::view-transition-old(deck-quote-text),
+::view-transition-new(deck-quote-text),
+::view-transition-old(deck-quote-source),
+::view-transition-new(deck-quote-source),
+::view-transition-old(bvn-note),
+::view-transition-new(bvn-note),
+::view-transition-old(bvn-chip),
+::view-transition-new(bvn-chip),
+::view-transition-old(reflection-name),
+::view-transition-new(reflection-name),
+::view-transition-old(reflection-body),
+::view-transition-new(reflection-body) {
+  width: auto;
+  height: auto;
+}
+
+/* ---- quote: the mark holds its place, the words blur out and come into focus */
+
+::view-transition-old(deck-quote-text) {
+  animation: deck-focus-out 300ms var(--deck-ease-in) both;
+}
+
+::view-transition-new(deck-quote-text) {
+  animation: deck-focus-in 900ms var(--deck-ease-out) 220ms both;
+}
+
+::view-transition-new(deck-quote-text):only-child {
+  animation: deck-focus-in 900ms var(--deck-ease-out) 200ms both;
+}
+
+::view-transition-old(deck-quote-text):only-child {
+  animation: deck-focus-out 240ms var(--deck-ease-exit) both;
+}
+
+::view-transition-new(deck-quote-mark):only-child {
+  animation: deck-mark-in 700ms var(--deck-ease-out) 120ms both;
+}
+
+@keyframes deck-mark-in {
+  from { opacity: 0; scale: 0.7; translate: 0 6px; }
+}
+
+::view-transition-new(deck-quote-source):only-child {
+  animation: deck-rise 600ms var(--deck-ease-out) 650ms both;
+}
+
+/* ---- ring: the cover's decorative ring becomes the contribution donut */
+
+::view-transition-group(deck-ring) {
+  animation-duration: 820ms;
+  animation-timing-function: var(--deck-ease-in-out);
+}
+
+::view-transition-old(deck-ring) {
+  animation: deck-fade-out 420ms ease-in 200ms both;
+}
+
+::view-transition-new(deck-ring) {
+  animation: deck-fade-in 300ms ease-out both;
+}
+
+/* ---- book vs now: the photo frame stays, the street behind it is walked past */
+
+::view-transition-group(bvn-photo) {
+  overflow: clip;
+}
+
+::view-transition-old(bvn-photo),
+::view-transition-new(bvn-photo) {
+  height: 100%;
+  mix-blend-mode: normal;
+}
+
+::view-transition-old(bvn-photo) {
+  animation: deck-street-past 760ms var(--deck-ease-in-out) both;
+}
+
+::view-transition-new(bvn-photo) {
+  animation: deck-street-next 760ms var(--deck-ease-in-out) both;
+}
+
+@keyframes deck-street-past {
+  to { translate: calc(-28% * var(--deck-dir)) 0; filter: brightness(0.6); }
+}
+
+@keyframes deck-street-next {
+  from { translate: calc(100% * var(--deck-dir)) 0; }
+}
+
+/* Arriving from another layout, the photo pane opens instead */
+::view-transition-new(bvn-photo):only-child {
+  animation:
+    deck-pane-open 900ms var(--deck-ease-out) 80ms both,
+    deck-settle 1400ms var(--deck-ease-out) 80ms both;
+}
+
+::view-transition-old(bvn-photo):only-child {
+  animation: deck-fade-out 320ms ease-in both;
+}
+
+:root[data-deck-nav='backward']::view-transition-new(bvn-photo):only-child {
+  animation: deck-fade-in 420ms ease-out both;
+}
+
+/* The chip belongs to the photo: it waits for the pane to open */
+::view-transition-new(bvn-chip):only-child {
+  animation: deck-rise 520ms var(--deck-ease-out) 620ms both;
+}
+
+::view-transition-old(bvn-chip),
+::view-transition-old(bvn-note) {
+  animation: deck-fade-out 180ms ease-in both;
+}
+
+::view-transition-new(bvn-chip),
+::view-transition-new(bvn-note) {
+  animation: deck-fade-in 360ms ease-out 360ms both;
+}
+
+/* ---- reflections: the header and rule stay, the name rolls over to the next person */
+
+::view-transition-group(reflection-name) {
+  overflow: clip;
+}
+
+::view-transition-old(reflection-name) {
+  animation: deck-roll-out 380ms var(--deck-ease-in) both;
+}
+
+::view-transition-new(reflection-name) {
+  animation: deck-roll-in 620ms var(--deck-ease-out) 180ms both;
+}
+
+@keyframes deck-roll-out {
+  to { opacity: 0; translate: 0 calc(-0.7em * var(--deck-dir)); }
+}
+
+@keyframes deck-roll-in {
+  from { opacity: 0; translate: 0 calc(0.7em * var(--deck-dir)); }
+}
+
+::view-transition-old(reflection-body) {
+  animation: deck-fade-out 220ms ease-in both;
+}
+
+::view-transition-new(reflection-body) {
+  animation: deck-rise 640ms var(--deck-ease-out) 260ms both;
+}
+
+/* The rule is a solid bar: let it stretch to its new length */
+::view-transition-old(reflection-rule),
+::view-transition-new(reflection-rule) {
+  height: 100%;
+  animation: none;
+}
+
+::view-transition-new(reflection-rule):only-child {
+  transform-origin: top;
+  animation: deck-rule-grow 760ms var(--deck-ease-out) 120ms both;
+}
+
+@keyframes deck-rule-grow {
+  from { scale: 1 0; }
+}
+
+/* ------------------------------------------------------------ entrances (forward only) */
+
+:root[data-deck-nav='forward'] #slideshow {
+  /* Content titles on plain, figure and mosaic slides */
+  & .slidev-layout.default > h1,
+  & .google-layout-header > .google-kicker,
+  & .google-layout-header > h1 {
+    animation: deck-rise 560ms var(--deck-ease-out) 140ms both;
+  }
+
+  & .slidev-layout.default > h1 + p,
+  & .google-layout-header > h1 + p {
+    animation: deck-rise 560ms var(--deck-ease-out) 220ms both;
+  }
+
+  /* Book slide: title, then the book lifts into place */
+  & .slidev-layout.book .book-text > * {
+    animation: deck-rise 600ms var(--deck-ease-out) 160ms both;
+  }
+
+  & .slidev-layout.book .book-text > * + * {
+    animation-delay: 260ms;
+  }
+
+  & .slidev-layout.book .book-stage img {
+    animation: deck-book-lift 1000ms var(--deck-ease-out) 220ms both;
+  }
+
+  /* Image beside text: text first, then the picture pane opens */
+  & .google-image-split .slidev-layout > * {
+    animation: deck-rise 560ms var(--deck-ease-out) 140ms both;
+  }
+
+  & .google-image-split .slidev-layout > * + * {
+    animation-delay: 220ms;
+  }
+
+  & .google-image-split .slidev-layout > .credit {
+    animation: deck-fade-in 600ms ease-out 900ms both;
+  }
+
+  & .google-image-pane {
+    animation: deck-pane-open 1000ms var(--deck-ease-out) 260ms both;
+  }
+
+  /* Mosaic: photos come in one after another, reading order */
+  & .deck-mosaic-item {
+    animation: deck-rise 700ms var(--deck-ease-out) 260ms both;
+  }
+
+  & .deck-mosaic-group:nth-child(2) .deck-mosaic-item,
+  & .deck-mosaic-item:nth-child(2) {
+    animation-delay: 380ms;
+  }
+
+  & .deck-mosaic-item img {
+    animation: deck-settle 1500ms var(--deck-ease-out) 260ms both;
+  }
+
+  & .deck-mosaic-chip {
+    animation: deck-fade-in 500ms ease-out 900ms both;
+  }
+
+  /* Full-bleed photo: the frame settles, then labels arrive in reading order */
+  & .slidev-layout.photo .deck-photo-img {
+    animation: deck-settle 1800ms var(--deck-ease-out) both;
+  }
+
+  & .slidev-layout.photo .deck-photo-scrim {
+    animation: deck-fade-in 900ms ease-out 200ms both;
+  }
+
+  & .slidev-layout.photo .deck-photo-chip {
+    animation: deck-rise 560ms var(--deck-ease-out) 420ms both;
+  }
+
+  & .slidev-layout.photo .deck-photo-caption {
+    animation: deck-rise 640ms var(--deck-ease-out) 560ms both;
+  }
+
+  & .slidev-layout.photo .deck-photo-map {
+    animation: deck-map-inset 700ms var(--deck-ease-out) 760ms both;
+  }
+
+  /* QR codes */
+  & .google-qr-row > * {
+    animation: deck-rise 600ms var(--deck-ease-out) 260ms both;
+  }
+
+  & .google-qr-row > * + * {
+    animation-delay: 360ms;
+  }
+}
+
+@keyframes deck-book-lift {
+  from { opacity: 0; translate: 0 18px; scale: 0.97; }
+}
+
+@keyframes deck-map-inset {
+  from { opacity: 0; translate: 0 14px; }
+}
+
+/* ------------------------------------------------------------ clicks going back */
+
+/* #slideshow carries the click direction; layouts style the forward case */
+#slideshow.slidev-nav-go-backward .reflection-body .reflection-scroll-enter-from {
+  translate: 0 -100cqh;
+}
+
+#slideshow.slidev-nav-go-backward .reflection-body .reflection-scroll-leave-to {
+  translate: 0 100cqh;
+}
+
+/* ------------------------------------------------------------ fallbacks */
+
+/* Browsers without View Transitions still get a clean cross-fade */
+@supports not (view-transition-name: none) {
+  #slideshow > .slidev-page {
+    animation: deck-fade-in 360ms ease-out both;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation-duration: 1ms !important;
+    animation-delay: 0s !important;
+  }
+
+  ::view-transition-old(deck-slide) {
+    animation: deck-fade-out 200ms ease both !important;
+  }
+
+  ::view-transition-new(deck-slide) {
+    animation: deck-fade-in 200ms ease both !important;
+  }
+
+  #slideshow *,
+  #slideshow *::before,
+  #slideshow *::after {
+    animation-duration: 1ms !important;
+    animation-delay: 0s !important;
+    transition-duration: 1ms !important;
+    transition-delay: 0s !important;
+  }
+}

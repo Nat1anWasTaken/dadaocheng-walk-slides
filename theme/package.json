@@ -19,6 +19,10 @@
         "provider": "none",
         "weights": "400,500,600,700",
         "serif": "Noto Serif TC Deck,PMingLiU,serif"
+      },
+      "transition": {
+        "name": "deck-view",
+        "css": false
       }
     }
   }
