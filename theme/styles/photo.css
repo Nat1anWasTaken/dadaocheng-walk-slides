@@ -491,6 +491,12 @@
 .deck-map-stop.is-active .deck-map-dot { fill: var(--google-red); }
 .deck-map-halo { fill: rgba(234, 67, 53, 0.2); }
 
+.deck-map-ping {
+  fill: none;
+  stroke: var(--google-red);
+  opacity: 0;
+}
+
 .deck-map-stop.is-todo .deck-map-dot {
   fill: white;
   stroke: #9aa0a6;
@@ -557,6 +563,72 @@
 .deck-map-compact .deck-map-credit {
   padding: 0 4px;
   font-size: 7px;
+}
+
+/*
+ * Arrival. On a drawn map the active stop waits for the line (--deck-map-arrive), then
+ * fills in, its halo opens and it sends out a single ping. Going back, the stop it
+ * lands on was already visited, so it fades from blue instead of from white.
+ */
+.deck-map.is-live .deck-map-halo,
+.deck-map.is-live .deck-map-ping,
+.deck-map.is-live .deck-map-label {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.deck-map.is-live .deck-map-stop.is-active .deck-map-halo {
+  animation: deck-map-halo 650ms var(--deck-ease-out) var(--deck-map-arrive) both;
+}
+
+.deck-map.is-live .deck-map-ping {
+  animation: deck-map-ping 1300ms var(--deck-ease-out) var(--deck-map-arrive) both;
+}
+
+.deck-map.is-live .deck-map-stop.is-active .deck-map-dot {
+  animation: deck-map-dot-from-todo 320ms ease-out var(--deck-map-arrive) both;
+}
+
+.deck-map.is-live .deck-map-stop.is-active .deck-map-num {
+  animation: deck-map-num-from-todo 320ms ease-out var(--deck-map-arrive) both;
+}
+
+.deck-map.is-live .deck-map-stop.is-active .deck-map-label {
+  transform-origin: left center;
+  animation: deck-map-label-in 520ms var(--deck-ease-out) var(--deck-map-arrive) both;
+}
+
+#slideshow.slidev-nav-go-backward .deck-map.is-live .deck-map-stop.is-active .deck-map-dot {
+  animation-name: deck-map-dot-from-done;
+}
+
+#slideshow.slidev-nav-go-backward .deck-map.is-live .deck-map-stop.is-active .deck-map-num {
+  animation-name: none;
+}
+
+@keyframes deck-map-halo {
+  from { opacity: 0; scale: 0.4; }
+}
+
+@keyframes deck-map-ping {
+  from { opacity: 0.75; scale: 1; }
+  to { opacity: 0; scale: 3.2; }
+}
+
+@keyframes deck-map-dot-from-todo {
+  from { fill: white; stroke: #9aa0a6; }
+}
+
+@keyframes deck-map-dot-from-done {
+  from { fill: var(--google-blue); }
+}
+
+@keyframes deck-map-num-from-todo {
+  from { fill: var(--google-muted); }
+}
+
+@keyframes deck-map-label-in {
+  from { opacity: 0; scale: 0.92; translate: -4px 0; }
 }
 
 /* A map alone on a `layout: full` slide goes edge to edge */

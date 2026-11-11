@@ -186,6 +186,11 @@ if (props.draw) {
 }
 
 const shown = computed(() => (props.draw && live.value && !entered.value ? 0 : target.value))
+// The line eases out, so it has visibly reached the next stop at about 70% of its run;
+// the stop lights up then rather than on the click.
+const rootStyle = computed(() => ({
+  '--deck-map-arrive': `${props.draw && live.value ? Math.round(props.duration * 0.7) : 0}ms`,
+}))
 const walkedStyle = computed(() => ({
   strokeDashoffset: String(1 - shown.value),
   opacity: shown.value > 0.001 ? 1 : 0,
@@ -247,7 +252,7 @@ const scaleBar = computed(() => {
 </script>
 
 <template>
-  <div ref="root" class="deck-map" :class="{ 'deck-map-compact': props.compact }">
+  <div ref="root" class="deck-map" :class="{ 'deck-map-compact': props.compact, 'is-live': live }" :style="rootStyle">
     <svg :viewBox="viewBox" preserveAspectRatio="xMidYMid meet" role="img" aria-label="走讀路線地圖">
       <rect :x="box.x - 2000" :y="box.y - 2000" :width="box.w + 4000" :height="box.h + 4000" class="deck-map-land" />
       <path v-for="(a, i) in areaPaths" :key="`a${i}`" :d="a.d" :class="`deck-map-area deck-map-${a.kind}`" :stroke-width="u(1)" />
@@ -279,6 +284,7 @@ const scaleBar = computed(() => {
         :transform="`translate(${m.x} ${m.y}) scale(${u(1)})`"
       >
         <circle v-if="m.state === 'active'" class="deck-map-halo" :r="m.r * 1.9" />
+        <circle v-if="m.state === 'active'" class="deck-map-ping" :r="m.r" :stroke-width="2 * sc" />
         <circle class="deck-map-dot" :r="m.r" :stroke-width="2.5 * sc" />
         <text class="deck-map-num" :style="{ fontSize: `${(m.state === 'active' ? 13 : 11.5) * sc}px` }">{{ m.num }}</text>
         <g v-if="m.label" class="deck-map-label">
