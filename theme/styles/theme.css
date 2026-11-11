@@ -799,3 +799,81 @@ body,
 .google-image-pane {
   background-color: #f1f3f4;
 }
+
+/* QR code (components/QrCode.vue) */
+.deck-qr {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 0;
+}
+
+.deck-qr-code,
+.slidev-layout a.deck-qr-code,
+.slidev-layout a.deck-qr-code:hover {
+  display: block;
+  box-sizing: content-box;
+  padding: 0.35rem;
+  border: 1px solid var(--google-border);
+  border-radius: 0.8rem;
+  background: white;
+  box-shadow: 0 4px 18px rgba(60, 64, 67, 0.08);
+  /* Keep modules black: link colors would lower scan contrast */
+  color: #000;
+  text-decoration: none;
+}
+
+.deck-qr-code svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.deck-qr figcaption {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15rem;
+  text-align: center;
+  line-height: 1.3;
+}
+
+.deck-qr-label {
+  color: var(--google-ink);
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.deck-qr-caption {
+  color: var(--google-muted);
+  font-family: var(--slidev-code-font-family);
+  font-size: 12px;
+}
+
+/* Cover: QR pinned to the bottom-right corner */
+.google-cover-qr {
+  position: absolute;
+  right: 4rem;
+  bottom: 2.5rem;
+}
+
+.google-cover-qr .deck-qr-label {
+  font-size: 14px;
+}
+
+/* Links slide: QR codes side by side */
+.google-qr-row {
+  display: flex;
+  justify-content: center;
+  gap: 6rem;
+  margin-top: 2.2rem;
+}
+
+.google-qr-row .deck-qr-label {
+  font-size: 22px;
+}
+
+.google-qr-row .deck-qr-caption {
+  font-size: 14px;
+}
