@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { handleBackground } from '../layoutHelper'
+import QrCode from '../components/QrCode.vue'
 
 type Accent = 'blue' | 'red' | 'yellow' | 'green'
 
@@ -16,6 +17,10 @@ const props = defineProps<{
   team?: string
   members?: string[]
   topics?: Topic[]
+  /** URL shown as a QR code in the bottom-right corner */
+  qr?: string
+  /** Label under the cover QR code */
+  qrLabel?: string
 }>()
 
 const style = computed(() => handleBackground(props.background, true))
@@ -41,5 +46,6 @@ const style = computed(() => handleBackground(props.background, true))
         {{ props.meta }}
       </div>
     </div>
+    <QrCode v-if="props.qr" class="google-cover-qr" :url="props.qr" :label="props.qrLabel" size="6.5rem" />
   </div>
 </template>

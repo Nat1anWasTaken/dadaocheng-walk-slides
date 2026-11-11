@@ -19,6 +19,8 @@ topics:
   - label: 大稻埕
     color: blue
 meta: 2026.11.11
+qr: https://nath.tw/dadaocheng-walk-slides/
+qrLabel: 掃描看簡報
 ---
 
 # 老鋪還在嗎？
@@ -430,4 +432,19 @@ scrim: light
 這是我們在城隍廟前的合照。老店會關，但那杯苦茶有多苦，我們會記得。謝謝大家。
 TODO(合照)：合照只有 4 人。作業要求全組到此一遊，若有第五位組員，請找他入鏡的照片或準備一句說明。
 TODO(同意)：上台前確認 4 位組員都同意自己的臉出現在公開網站上。
+-->
+
+---
+layout: default
+---
+
+# 關於這份簡報
+
+<div class="google-qr-row">
+  <QrCode url="https://github.com/Nat1anWasTaken/dadaocheng-walk-slides" label="GitHub Repo" size="12rem" />
+  <QrCode url="https://sli.dev/" label="Slidev" size="12rem" />
+</div>
+
+<!--
+簡報以 Slidev 製作，原始碼公開在 GitHub。
 -->
