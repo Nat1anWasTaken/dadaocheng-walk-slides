@@ -204,37 +204,6 @@ photos:
 # 生記還在
 
 ---
-layout: default
----
-
-# 替 AI 改作業
-
-<div class="paper">
-  <div class="line">
-    <p>延平北路 → 民樂街 → 永樂市場 → 迪化街 → 生記藥行 → <span v-mark="{ at: 1, color: '#d93025', type: 'circle' }">霞海城隍廟</span></p>
-    <div class="pen" v-click="1">路線走得通</div>
-  </div>
-  <div class="line">
-    <p>第三代姚勝雄……<span v-mark="{ at: 2, color: '#d93025', type: 'strike-through' }">在父親原本不贊成的情況下</span>推動2017年店面改造</p>
-    <div class="pen" v-click="2">這是建翔蔬菜的故事</div>
-  </div>
-  <div class="line">
-    <p>位置：迪化街一段21號；林良號史料位置為<span v-mark="{ at: 3, color: '#d93025', type: 'underline' }">一樓1506號攤</span></p>
-    <div class="pen" v-click="3">門牌在，人呢？</div>
-  </div>
-  <div class="src">摘自出發前 AI 整理的〈探勘地點清單〉（10/21）</div>
-</div>
-
-<style>
-.paper { margin-top: 32px; padding: 20px 32px 20px; background: #fffdf7; border: 1px solid var(--google-border); border-radius: 6px; box-shadow: var(--google-shadow); font-family: 'Noto Serif TC Deck', serif; }
-.paper .line { display: flex; align-items: baseline; justify-content: space-between; gap: 24px; padding: 24px 0; border-bottom: 1px dashed #e6dfcf; }
-.paper .line:last-of-type { border-bottom: none; }
-.paper p { margin: 0; font-size: 19px; white-space: nowrap; color: var(--google-ink); }
-.paper .pen { flex: none; font-size: 19px; color: #d93025; transform: rotate(-3deg); white-space: nowrap; }
-.paper .src { margin-top: 10px; font-family: 'Google Sans', sans-serif; font-size: 12px; color: var(--google-muted); }
-</style>
-
----
 layout: photo
 image: /images/06-xiahai-temple-01-temple-front.jpg
 position: 50% 40%
