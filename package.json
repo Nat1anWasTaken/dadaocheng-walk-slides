@@ -5,6 +5,7 @@
   "license": "MIT",
   "scripts": {
     "build": "slidev build",
+    "build:offline": "OFFLINE=1 slidev build --base ./ --router-mode hash -o offline && node scripts/offline-paths.mjs offline",
     "dev": "slidev --open",
     "export": "slidev export",
     "fonts": "uv run --with fonttools --with brotli python scripts/subset-fonts.py",
@@ -16,6 +17,7 @@
     "vue": "^3.5.33"
   },
   "devDependencies": {
-    "playwright-chromium": "^1.62.1"
+    "playwright-chromium": "^1.62.1",
+    "vite-plugin-singlefile": "^2.3.4"
   }
 }
